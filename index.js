@@ -7,7 +7,7 @@ dotenv.config({
     path: "./.env"
 });    
 
-const port=process.env.PORT || 5000
+const port=process.env.PORT || 8005
 
 connectdb() //call the connectdb function to establish a connection to the database before starting the server 
  .then(() => { // if the connection is successful, then start the server
@@ -21,5 +21,6 @@ connectdb() //call the connectdb function to establish a connection to the datab
 
 app.use("/api/v1/healthcheck", router); // middleware to handle the healthcheck route, when a request is made to /api/v1/healthcheck, it will call the healthcheck function from the controller and return the response.
 
-
-
+app.get("/", (req, res) => { // middleware function to handle GET requests to the root path of the server, it will return a JSON object with a message "Welcome to the Project Management API".
+    res.json("Welcome to the Project Management API" );
+});

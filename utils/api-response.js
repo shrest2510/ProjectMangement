@@ -1,6 +1,6 @@
-// Standard API response format - Instead of sending random JSON shapes from different endpoints, you enforce a uniform format:
+// Standard API response format for data output - Instead of sending random JSON shapes from different endpoints, you enforce a uniform format:
 
-class Apiresponse {
+class Apiresponse {   // Create a class to standardize API responses when it is called constructor is first invoked
     constructor(statusCode,data,message='Success') {
         this.statusCode = statusCode;
         this.message = message;
