@@ -60,13 +60,33 @@ userSchema.methods.generaterefreshToken = function(){ // method to generate a re
     return token;
 }
 
-userSchema.methods.generateTemporaryToken = function(){ // method to generate a password reset token for the user
-    const resetToken = crypto.randomBytes(20).toString("hex"); // generating a random token using crypto module
-    const hashedResetToken = crypto.createHash("sha256").update(resetToken).digest("hex"); // hashing the token before saving it to the database
-    this.passwordResetToken = hashedResetToken; // saving the hashed token to the database
-    this.passwordResetExpires = Date.now() + 3600000; // setting the expiration time for the token to 1 hour
-    return resetToken; // returning the original token to send it to the user's email
-}   
+userSchema.methods.generateEmailVerificationToken = function () {
+    const token = crypto.randomBytes(20).toString("hex");
+
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    this.emailverificationtoken = hashedToken;
+    this.emailverificationexpires = Date.now() + 3600000; // 1 hour
+
+    return token;
+};
+
+userSchema.methods.generatePasswordResetToken = function () {
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    const hashedResetToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+
+    this.forgotpasswordtoken = hashedResetToken;
+    this.forgotpasswordexpires = Date.now() + 3600000;
+
+    return resetToken;
+};
 
 const User = mongoose.model("User", userSchema); // creating a model for user schema and exporting it to use in other parts of the application
 export default User;

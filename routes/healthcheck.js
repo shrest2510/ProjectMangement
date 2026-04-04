@@ -16,4 +16,4 @@ router.get('/', async (req, res, next) => { // middleware function to handle GET
     }
 });
 // export router with all routes included
-export { router };
+export default  router ;

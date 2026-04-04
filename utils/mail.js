@@ -1,7 +1,9 @@
 import Mailgen from "mailgen";  
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config(); 
 
-mailgen = new Mailgen({  //configuring mailgen with the theme and product information
+const mailgen = new Mailgen({  //configuring mailgen with the theme and product information
     theme : "default",
     product : {
         name : "Project Management Tool",
@@ -10,13 +12,14 @@ mailgen = new Mailgen({  //configuring mailgen with the theme and product inform
 });
 
 const transporter = nodemailer.createTransport({ // configuring nodemailer with the mailtrap credentials to send emails
-    host : process.env.MAilTrap_HOST,
-    port : process.env.MAilTrap_PORT,
+    host : process.env.MAILTRAP_HOST,
+    port : process.env.MAILTRAP_PORT,
     auth : {
-        user : process.env.MAilTrap_USER,
-        pass : process.env.MAilTrap_PASS
+        user : process.env.MAILTRAP_USER,
+        pass : process.env.MAILTRAP_PASS
     }
 });
+
 
 const generateEmailTemplate = (username , verificationurl) => { // content of email template for verification email
         return {
@@ -55,13 +58,16 @@ const forgetpassEmailTemplate = (username , passwordurl) => {
 };
 
 
-const sendEmail = async (to , subject , html) => { // function to send email using nodemailer
+const sendEmail = async (to, subject, template) => { 
+    const html = mailgen.generate(template);  
+
     const mailOptions = {
-        from : "mail@projectmanagementtool.com",
-        to : to,
-        subject : subject,
-        html : html
+        from: "mail@projectmanagementtool.com",
+        to: to,
+        subject: subject,
+        html: html
     };
+
     try {
         await transporter.sendMail(mailOptions);
         console.log("Email sent successfully");
